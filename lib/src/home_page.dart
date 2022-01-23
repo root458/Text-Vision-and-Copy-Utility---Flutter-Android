@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:vision_text/src/controller_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.cameras}) : super(key: key);
@@ -34,12 +36,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get Controller Provider
+    final _controllerService = Provider.of<ControllerService>(context);
+
     if (!controller.value.isInitialized) {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
-          child: SpinKitDoubleBounce(
-            color: Colors.blue,
-            size: 50.0,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.width * 0.7,
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: const FittedBox(
+              child: SpinKitDoubleBounce(
+                color: Colors.black,
+              ),
+            ),
           ),
         ),
       );
@@ -50,8 +60,19 @@ class _HomePageState extends State<HomePage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.flash_on),
-          onPressed: () => controller.setFlashMode(FlashMode.torch),
+          icon: _controllerService.flashMode == 0
+              ? const Icon(Icons.flash_on)
+              : const Icon(Icons.flash_off),
+          onPressed: () {
+            // Set flash mode off/on
+            if (_controllerService.flashMode == 0) {
+              controller.setFlashMode(FlashMode.torch);
+            } else {
+              controller.setFlashMode(FlashMode.off);
+            }
+            // Update flash mode status
+            _controllerService.changeFlashMode();
+          },
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
