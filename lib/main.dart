@@ -2,15 +2,15 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vision_text/src/controller_service.dart';
-import 'package:vision_text/src/home_page.dart';
+import 'package:vision_text/src/text_detectorv2_view.dart';
 
-List<CameraDescription>? cameras;
+List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   cameras = await availableCameras();
   runApp(MyApp(
-    cameras: cameras!,
+    cameras: cameras,
   ));
 }
 
@@ -29,9 +29,10 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Euclid',
           primarySwatch: Colors.blue,
         ),
-        home: HomePage(
-          cameras: cameras,
-        ),
+        // home: HomePage(
+        //   cameras: cameras,
+        // ),
+        home: const TextDetectorV2View(),
       ),
     );
   }

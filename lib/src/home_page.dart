@@ -84,7 +84,18 @@ class _HomePageState extends State<HomePage> {
           Flexible(
               child: Center(
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () async {
+                // Take picture
+                // XFile _imageFile = await controller.takePicture();
+                // Pause
+                controller.pausePreview();
+                // Perform Detection
+                // RecognisedText recognizedText =
+                //     await RecognizeTextService.recognizeTextFromImage(
+                //         _imageFile);
+
+                // print(recognizedText);
+              },
               icon: const Icon(
                 Icons.search,
                 color: Colors.black,
@@ -104,4 +115,26 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  // Future<void> processImage(InputImage inputImage) async {
+  //   if (isBusy) return;
+  //   isBusy = true;
+  //   final recognisedText = await textDetector.processImage(inputImage,
+  //       script: TextRecognitionOptions.DEVANAGIRI);
+  //   print('Found ${recognisedText.blocks.length} textBlocks');
+  //   if (inputImage.inputImageData?.size != null &&
+  //       inputImage.inputImageData?.imageRotation != null) {
+  //     final painter = TextDetectorPainter(
+  //         recognisedText,
+  //         inputImage.inputImageData!.size,
+  //         inputImage.inputImageData!.imageRotation);
+  //     customPaint = CustomPaint(painter: painter);
+  //   } else {
+  //     customPaint = null;
+  //   }
+  //   isBusy = false;
+  //   if (mounted) {
+  //     setState(() {});
+  //   }
+  // }
 }
