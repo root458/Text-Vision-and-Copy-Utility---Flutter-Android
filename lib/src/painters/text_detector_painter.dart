@@ -14,6 +14,9 @@ class TextDetectorPainter extends CustomPainter {
   final Size absoluteImageSize;
   final InputImageRotation rotation;
 
+  // ignore: prefer_final_fields
+  List<Path> _paths = [];
+
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
@@ -49,6 +52,9 @@ class TextDetectorPainter extends CustomPainter {
         paint,
       );
 
+      // Add path to list of paths
+      _paths.add(Path()..addRect(Rect.fromLTRB(left, top, right, bottom)));
+
       canvas.drawParagraph(
         builder.build()
           ..layout(ParagraphConstraints(
@@ -66,6 +72,14 @@ class TextDetectorPainter extends CustomPainter {
 
   @override
   bool? hitTest(Offset position) {
+    // Print the words in the tapped rectangle
+    for (int i = 0; i < _paths.length; i++) {
+      if (_paths[i].contains(position)) {
+        print(recognisedText.blocks[i].text);
+        // Copy text, alert user
+        
+      }
+    }
     return super.hitTest(position);
   }
 }

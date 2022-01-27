@@ -88,19 +88,19 @@ class _CameraViewState extends State<CameraView> {
                     ? const Icon(Icons.play_arrow_outlined)
                     : Container()),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: _switchScreenMode,
-              child: Icon(
-                _mode == ScreenMode.liveFeed
-                    ? Icons.image_outlined
-                    : (Platform.isIOS
-                        ? Icons.camera_alt_outlined
-                        : Icons.camera),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 20.0),
+          //   child: GestureDetector(
+          //     onTap: _switchScreenMode,
+          //     child: Icon(
+          //       _mode == ScreenMode.liveFeed
+          //           ? Icons.image_outlined
+          //           : (Platform.isIOS
+          //               ? Icons.camera_alt_outlined
+          //               : Icons.camera),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       body: _body(),
