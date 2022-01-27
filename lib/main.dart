@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vision_text/src/services/notification_provider.dart';
@@ -7,6 +8,7 @@ import 'package:vision_text/src/text_detectorv2_view.dart';
 List<CameraDescription> cameras = [];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   cameras = await availableCameras();
   runApp(MyApp(
@@ -29,9 +31,6 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Euclid',
           primarySwatch: Colors.blue,
         ),
-        // home: HomePage(
-        //   cameras: cameras,
-        // ),
         home: const TextDetectorV2View(),
       ),
     );

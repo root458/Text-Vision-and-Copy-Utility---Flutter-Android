@@ -2,8 +2,10 @@ import 'dart:ui';
 import 'dart:ui' as ui;
 
 import 'package:clipboard/clipboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:vision_text/src/services/firebase_functions.dart';
 import 'package:vision_text/src/services/notification_provider.dart';
 
 import 'coordinates_translator.dart';
@@ -78,17 +80,34 @@ class TextDetectorPainter extends CustomPainter {
     // Print the words in the tapped rectangle
     for (int i = 0; i < _paths.length; i++) {
       if (_paths[i].contains(position)) {
-        print(recognisedText.blocks[i].text);
         // Copy text, alert user
         FlutterClipboard.copy(recognisedText.blocks[i].text)
-            .then((_copiedText) {
+            .then((_copiedText) async {
           // Alert user
           notificatioProvider.alterVisibility();
           Future.delayed(const Duration(seconds: 2)).then((value) {
             notificatioProvider.alterVisibility();
           });
           // Send to desktop
-          
+          AuthService _authService = AuthService();
+          DataBase _dataBase = DataBase();
+          if (_authService.signedIn()) {
+            // Go ahead to write to database
+            await _dataBase.addCopiedText({
+              'text': recognisedText.blocks[i].text,
+              'date': DateTime.now().toString()
+            });
+          } else {
+            User? user = await _authService.signInAnon();
+
+            if (user != null) {
+              // Write to database
+              await _dataBase.addCopiedText({
+              'text': recognisedText.blocks[i].text,
+              'date': DateTime.now().toString()
+            });
+            }
+          }
         });
       }
     }
