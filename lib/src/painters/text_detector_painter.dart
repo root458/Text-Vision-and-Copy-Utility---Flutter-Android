@@ -1,18 +1,21 @@
 import 'dart:ui';
 import 'dart:ui' as ui;
 
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:vision_text/src/services/notification_provider.dart';
 
 import 'coordinates_translator.dart';
 
 class TextDetectorPainter extends CustomPainter {
-  TextDetectorPainter(
-      this.recognisedText, this.absoluteImageSize, this.rotation);
+  TextDetectorPainter(this.recognisedText, this.absoluteImageSize,
+      this.rotation, this.notificatioProvider);
 
   final RecognisedText recognisedText;
   final Size absoluteImageSize;
   final InputImageRotation rotation;
+  final NotificatioProvider notificatioProvider;
 
   // ignore: prefer_final_fields
   List<Path> _paths = [];
@@ -77,7 +80,16 @@ class TextDetectorPainter extends CustomPainter {
       if (_paths[i].contains(position)) {
         print(recognisedText.blocks[i].text);
         // Copy text, alert user
-        
+        FlutterClipboard.copy(recognisedText.blocks[i].text)
+            .then((_copiedText) {
+          // Alert user
+          notificatioProvider.alterVisibility();
+          Future.delayed(const Duration(seconds: 2)).then((value) {
+            notificatioProvider.alterVisibility();
+          });
+          // Send to desktop
+          
+        });
       }
     }
     return super.hitTest(position);

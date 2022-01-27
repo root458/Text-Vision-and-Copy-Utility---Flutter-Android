@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:vision_text/src/services/notification_provider.dart';
 
 import '../main.dart';
 
@@ -36,6 +38,7 @@ class _CameraViewState extends State<CameraView> {
   ImagePicker? _imagePicker;
   int _cameraIndex = 0;
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
+  late var notificationProvider;
 
   @override
   void initState() {
@@ -58,6 +61,9 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
+    // Get provider
+    notificationProvider = Provider.of<NotificatioProvider>(context);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -150,6 +156,27 @@ class _CameraViewState extends State<CameraView> {
         children: <Widget>[
           CameraPreview(_controller!),
           if (widget.customPaint != null) widget.customPaint!,
+          Positioned(
+            bottom: 150,
+            left: 50,
+            right: 50,
+            child: Consumer<NotificatioProvider>(
+              builder: (context, value, child) {
+                return Visibility(
+                  visible: value.notificationVisible,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Center(child: Text('Text Copied')),
+                      )),
+                );
+              },
+            ),
+          ),
           Positioned(
             bottom: 100,
             left: 50,

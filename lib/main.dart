@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vision_text/src/controller_service.dart';
+import 'package:vision_text/src/services/notification_provider.dart';
 import 'package:vision_text/src/text_detectorv2_view.dart';
 
 List<CameraDescription> cameras = [];
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => ControllerService(),
+      create: (context) => NotificatioProvider(),
       child: MaterialApp(
         title: 'Vision Text',
         theme: ThemeData(
